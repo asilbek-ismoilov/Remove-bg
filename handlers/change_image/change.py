@@ -4,6 +4,7 @@ from keyboard_buttons.inlinebuttonss import colors_button
 from loader import dp, bot, TOKEN
 from removebg import remove_bg
 from removebgpic import remove_bg_pic
+import asyncio
 
 @dp.message(lambda message: not message.photo)
 async def photo_del(message: types.Message):
@@ -26,7 +27,6 @@ async def photo(message:Message):
 async def black_handler(callback:CallbackQuery):
     file_id = callback.message.photo[-1].file_id
     file = await bot.get_file(file_id)
-    print(file)
     file_path = file.file_path
     photos_url = f"https://api.telegram.org/file/bot{TOKEN}/{file_path}"
     rasm = remove_bg(photos_url,"black")
@@ -85,25 +85,33 @@ async def green_handler(callback:CallbackQuery):
     file = await bot.get_file(file_id)
     file_path = file.file_path
     photos_url = f"https://api.telegram.org/file/bot{TOKEN}/{file_path}"
-    rasm =remove_bg(photos_url,"green")
+    rasm =remove_bg_pic(photos_url,"green")
     text = "Rasmni orqa fonini qaysi ranga o'zgartirmoqchisiz tanlang !"
     await callback.message.answer_photo(photo=types.input_file.BufferedInputFile(rasm,filename="no-bg.png"),reply_markup=colors_button, caption=text)
     await callback.message.delete()
 
 
-@dp.callback_query(F.data=="png")
+@dp.callback_query(F.data == "png")
 async def png(callback: CallbackQuery):
     file_id = callback.message.photo[-1].file_id
     file = await bot.get_file(file_id)
     file_path = file.file_path
     photos_url = f"https://api.telegram.org/file/bot{TOKEN}/{file_path}"
-    
+
     rasm = remove_bg_pic(photos_url)
     text = "Rasmni orqa fonini qaysi ranga o'zgartirmoqchisiz tanlang !"
 
     if rasm:
-        await callback.message.answer_document(document=types.input_file.BufferedInputFile(rasm, filename="no-bg.png"))
-        await callback.message.answer_photo(photo=types.input_file.BufferedInputFile(rasm,filename="no-bg.png"),reply_markup=colors_button, caption=text)
+        await callback.message.answer_photo(photo=types.input_file.BufferedInputFile(rasm, filename="no-bg.png"), reply_markup=colors_button, caption=text)
+        
+        # Hujjatli xabarni yuborish va ID'sini saqlash
+        document_message = await callback.message.answer_document(document=types.input_file.BufferedInputFile(rasm, filename="no-bg.png"))
+        
+        # 2 daqiqalik kutish
+        await asyncio.sleep(120)
+        
+        # Hujjatli xabarni o'chirish
+        await document_message.delete()
     else:
         await callback.message.answer("Rasmning orqa fonini olib tashlashda xatolik yuz berdi.")
     await callback.message.delete()

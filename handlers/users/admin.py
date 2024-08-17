@@ -1,11 +1,9 @@
-from filters.check_sub_channel import IsCheckSubChannels
 from loader import bot,db,dp,CHANNELS,ADMINS
-from aiogram.utils.keyboard import InlineKeyboardBuilder
-from aiogram.types import Message,InlineKeyboardButton
+from aiogram.types import Message
 from aiogram.filters import Command
 from filters.admin import IsBotAdminFilter
 from states.reklama import Adverts
-from aiogram.fsm.context import FSMContext #new
+from aiogram.fsm.context import FSMContext 
 from keyboard_buttons import admin_keyboard
 import time 
 from aiogram import F

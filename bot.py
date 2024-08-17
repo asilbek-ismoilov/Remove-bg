@@ -34,14 +34,11 @@ def setup_middlewares(dispatcher: Dispatcher, bot: Bot) -> None:
     dispatcher.message.middleware(ThrottlingMiddleware(slow_mode_delay=0.5))
 
 
-
 async def main() -> None:
     await set_default_commands(bot)
     db.create_table_users()
     setup_middlewares(dispatcher=dp, bot=bot)
     await dp.start_polling(bot)
-
-
 
 
 if __name__ == "__main__":
