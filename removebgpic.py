@@ -2,7 +2,7 @@ import requests
 
 def remove_bg_pic(FILE_NAME): 
     rasm=''
-    API_KEY = 'shgwKNYNNsbtZ6uMzmcjNLrq'
+    API_KEY = 'YOUR_API'
 
     response = requests.post(
         'https://api.remove.bg/v1.0/removebg',
